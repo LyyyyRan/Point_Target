@@ -73,11 +73,12 @@ view_azimuth = 230
 print('view_azimuth', view_azimuth)
 
 # 点目标格式[x,y,反射系数sigma]
-Ptarget = np.array([[Xmin, Yc - 50 * DY, 1],  # 点目标位置，这里设置了5个点目标，构成一个矩形以及矩形的中心
-    [Xmin + 50 * DX, Yc - 50 * DY, 1],
-    [Xmin + 25 * DX, Yc, 1],
-    [Xmin, Yc + 50 * DY, 1],
-    [Xmin + 50 * DX, Yc + 50 * DY, 1]])
+sigma = 122.39
+Ptarget = np.array([[Xmin, Yc - 50 * DY, sigma],  # 点目标位置，这里设置了5个点目标，构成一个矩形以及矩形的中心
+    [Xmin + 50 * DX, Yc - 50 * DY, sigma],
+    [Xmin + 25 * DX, Yc, sigma],
+    [Xmin, Yc + 50 * DY, sigma],
+    [Xmin + 50 * DX, Yc + 50 * DY, sigma]])
 
 # 参数显示:
 print('Parameters:')

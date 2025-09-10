@@ -33,7 +33,8 @@ DY = D / 2  # 方位向分辨率  ρ_a = v_a / B_a，v_a为SAR移动速度，B_a
 # print(Image_Modulus.max(), Image_Modulus.min())
 
 # Get Mask:
-Mask_threshold = 263.5
+print(Image_Modulus.max())
+Mask_threshold = np.floor(Image_Modulus.max())
 Mask_Condition = Image_Modulus > Mask_threshold
 Mask_Condition = Mask_Condition.astype(int)
 y, x = np.where(Mask_Condition == 1)
@@ -45,6 +46,8 @@ Mod_Mask = np.abs(ROI_Mask)
 ROI_Center = y + 1, x + 1
 HW = 32
 y0, x0 = ROI_Center[0] - HW / 2., ROI_Center[1] - HW / 2.
+print(y0, x0)
+
 y0, x0 = int(y0), int(x0)
 print('ROI Points:', y0, x0, y0 + HW, x0 + HW)
 print('ROI Center:', ROI_Center)
