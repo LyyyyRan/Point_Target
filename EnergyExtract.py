@@ -49,10 +49,29 @@ IntegrationA = (ROI_A ** 2).sum()
 
 ########### Calculate Energy ###########
 # Num_UpSampling =
-Energy = (IntegrationA - (NumA * IntegrationB / NumB))
+# Energy = (IntegrationA - (NumA * IntegrationB / NumB)) * 0.4 * 0.2 * D_Azimuth * D_Range  # Unknow delta_a and delta_r, so that use part of their Spatial Resolution
+Energy = (IntegrationA - (NumA * IntegrationB / NumB)) * 1.7354013507078536 * 3.2261778224237325
+# Energy /= 9.  # cuz by Upsampling, whether need to perform?
 Energy_dB = 10 * np.log10(Energy)
 print('Extracted Energy:', Energy)
 print('Extracted Energy/dB:', Energy_dB)
+print()
+
+# RCS:
+# RCS = 122.39
+RCS = 25.136
+RCS_dB = 10 * np.log10(RCS)
+
+print('Setting RCS:', RCS)
+print('Setting RCS/dB:', RCS_dB)
+print()
+
+# Calibration:
+Calibration_K = Energy / RCS
+Calibration_K_dB = 10 * np.log10(Calibration_K)
+
+print('Calibration Constant K:', Calibration_K)
+print('Calibration Constant K/dB:', Calibration_K_dB)
 
 # To show:
 ROI_BBox_show = ROI_Mod.copy()  # Copy

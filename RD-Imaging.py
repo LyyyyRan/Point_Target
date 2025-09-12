@@ -1,5 +1,6 @@
 import numpy as np
-from np2mtlb import nextpow2, FFT_Range, FFT_Azimuth, FFTShift, apostrophe, pointwise_apostrophe, IFFT_Range, IFFT_Azimuth
+from np2mtlb import nextpow2, FFT_Range, FFT_Azimuth, FFTShift, apostrophe, pointwise_apostrophe, IFFT_Range, \
+    IFFT_Azimuth
 import matplotlib.pyplot as plt
 
 # 常数定义
@@ -73,12 +74,13 @@ view_azimuth = 230
 print('view_azimuth', view_azimuth)
 
 # 点目标格式[x,y,反射系数sigma]
-sigma = 122.39
+# sigma = 122.39
+sigma = 25.136
 Ptarget = np.array([[Xmin, Yc - 50 * DY, sigma],  # 点目标位置，这里设置了5个点目标，构成一个矩形以及矩形的中心
-    [Xmin + 50 * DX, Yc - 50 * DY, sigma],
-    [Xmin + 25 * DX, Yc, sigma],
-    [Xmin, Yc + 50 * DY, sigma],
-    [Xmin + 50 * DX, Yc + 50 * DY, sigma]])
+                    [Xmin + 50 * DX, Yc - 50 * DY, sigma],
+                    [Xmin + 25 * DX, Yc, sigma],
+                    [Xmin, Yc + 50 * DY, sigma],
+                    [Xmin + 50 * DX, Yc + 50 * DY, sigma]])
 
 # 参数显示:
 print('Parameters:')
@@ -110,7 +112,7 @@ Srnm = np.zeros([N, M])  # 生成零矩阵存储回波信号
 for k in range(1, K + 1):  # k=1:K  # 总共K个目标，已设置为5个
     sigma = T[k - 1, 3 - 1]  # 得到目标的反射系数
     Dslow = sn * V - T[k - 1, 1 - 1]  # 方位向距离，投影到方位向的距离，即(x - x_t)^2，即[v(s - s_0)]^2，此处为 (s_0 * v - x)^2，sn变量存储各个s_0时刻
-    R = np.sqrt(Dslow ** 2 + T[k-1, 2-1] ** 2 + H ** 2)  # 实际距离矩阵
+    R = np.sqrt(Dslow ** 2 + T[k - 1, 2 - 1] ** 2 + H ** 2)  # 实际距离矩阵
     tau = 2 * R / C  # 回波相对于发射波的延时
 
     # (t-tau)，其实就是时间矩阵，ones(N,1) 和 ones(1,M) 都是为了将其扩展为矩阵
@@ -140,13 +142,16 @@ plt.figure('Echo Modulus[idx, :]')
 plt.plot(np.abs(Srnm[view_azimuth, :]))
 plt.xlabel('Range')
 plt.ylabel('Modulus')
-plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024], labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
+plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024],
+           labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
 plt.title('Echo Modulus[idx, :]')
 
 plt.figure('Echo image')
 plt.imshow(np.abs(Srnm))
-plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024], labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
-plt.yticks(ticks=[0, 64, 128, 192, 256, 320, 384, 448, 512], labels=[f"{i}" for i in np.around(np.linspace(Xmin - Lsar / 2, Xmax + Lsar / 2, 9)).astype(int)])
+plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024],
+           labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
+plt.yticks(ticks=[0, 64, 128, 192, 256, 320, 384, 448, 512],
+           labels=[f"{i}" for i in np.around(np.linspace(Xmin - Lsar / 2, Xmax + Lsar / 2, 9)).astype(int)])
 plt.xlabel('Range')
 plt.ylabel('Azimuth')
 plt.title('Echo image')
@@ -175,13 +180,16 @@ plt.figure('Modulus After Pulse Compression over Range')
 plt.plot(Img_AfterRangePulseCompression[view_azimuth, :])
 plt.xlabel('Range')
 plt.ylabel('Modulus')
-plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024], labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
+plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024],
+           labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
 plt.title('Modulus After Pulse Compression over Range')
 
 plt.figure('After Pulse Compression over Range')
 plt.imshow(Img_AfterRangePulseCompression)  # 距离向压缩，未校正距离徙动的图像
-plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024], labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
-plt.yticks(ticks=[0, 64, 128, 192, 256, 320, 384, 448, 512], labels=[f"{i}" for i in np.around(np.linspace(Xmin - Lsar / 2, Xmax + Lsar / 2, 9)).astype(int)])
+plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024],
+           labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
+plt.yticks(ticks=[0, 64, 128, 192, 256, 320, 384, 448, 512],
+           labels=[f"{i}" for i in np.around(np.linspace(Xmin - Lsar / 2, Xmax + Lsar / 2, 9)).astype(int)])
 plt.xlabel('Range')
 plt.ylabel('Azimuth')
 plt.title('After Pulse Compression over Range')
@@ -213,7 +221,7 @@ for n in range(1, N + 1):  # n=1:N  # 总共有N个方位采样
         n_index, m_index = n - 1, m - 1
 
         if m + Integer_RMC > M:  # 判断是否超出边界
-            Sa_RD[n_index, m_index] = Sa_RD[n_index, int(np.around(M/2)) - 1]
+            Sa_RD[n_index, m_index] = Sa_RD[n_index, int(np.around(M / 2)) - 1]
         else:
             if decimal_RMC >= 0.5:  # 五入
                 Sa_RD[n_index, m_index] = Sa_RD[n_index, m_index + Integer_RMC + 1]
@@ -227,13 +235,16 @@ plt.figure('Modulus After RCMC')
 plt.plot(np.abs(Img_AfterRCMC[view_azimuth, :]))
 plt.xlabel('Range')
 plt.ylabel('Modulus')
-plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024], labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
+plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024],
+           labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
 plt.title('Modulus After RCMC')
 
 plt.figure('After RCMC')
 plt.imshow(np.abs(Img_AfterRCMC))  # 距离向压缩，未校正距离徙动的图像
-plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024], labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
-plt.yticks(ticks=[0, 64, 128, 192, 256, 320, 384, 448, 512], labels=[f"{i}" for i in np.around(np.linspace(Xmin - Lsar / 2, Xmax + Lsar / 2, 9)).astype(int)])
+plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024],
+           labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
+plt.yticks(ticks=[0, 64, 128, 192, 256, 320, 384, 448, 512],
+           labels=[f"{i}" for i in np.around(np.linspace(Xmin - Lsar / 2, Xmax + Lsar / 2, 9)).astype(int)])
 plt.xlabel('Range')
 plt.ylabel('Azimuth')
 plt.title('After RCMC')
@@ -252,17 +263,41 @@ plt.figure('Modulus Pulse Compress over Azimuth')
 plt.plot(np.abs(Img_AfterAzimuthPulseCompression[view_azimuth, :]))
 plt.xlabel('Range')
 plt.ylabel('Modulus')
-plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024], labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
+plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024],
+           labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
 plt.title('Modulus Pulse Compress over Azimuth')
 
 fig, ax = plt.subplots()
-plt.imshow(np.abs(Img_AfterAzimuthPulseCompression))  # 距离向压缩，未校正距离徙动的图像
-plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024], labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
-plt.yticks(ticks=[0, 64, 128, 192, 256, 320, 384, 448, 512], labels=[f"{i}" for i in np.around(np.linspace(Xmin - Lsar / 2, Xmax + Lsar / 2, 9)).astype(int)])
+plt.imshow(np.abs(Img_AfterAzimuthPulseCompression))
+plt.xticks(ticks=[0, 128, 256, 384, 512, 640, 768, 896, 1024],
+           labels=[f"{i}" for i in np.around(np.linspace(Yc - Y0, Yc + Y0, 9)).astype(int)])
+plt.yticks(ticks=[0, 64, 128, 192, 256, 320, 384, 448, 512],
+           labels=[f"{i}" for i in np.around(np.linspace(Xmin - Lsar / 2, Xmax + Lsar / 2, 9)).astype(int)])
 ax.axis('scaled')
 plt.xlabel('Range')
 plt.ylabel('Azimuth')
 plt.title('After Pulse Compress over Azimuth')
+
+# Get Pixel Size:
+Na, Nr = Img_AfterAzimuthPulseCompression.shape
+delta_R = (tr[0, -1] - tr[0, 0]) * C / Nr
+delta_A = (ta[0, -1] - ta[0, 0]) * V / Na
+
+print('delta_R: {}, delta_A, {}'.format(delta_R, delta_A))
+
+# Get Peak arg and val:
+peak_val_arg = np.abs(Img_AfterAzimuthPulseCompression[view_azimuth, :]).argmax()
+second_peak_val_arg = np.abs(Img_AfterAzimuthPulseCompression[view_azimuth, :int((10200-9500) * 1024 / 1000)]).argmax()
+peak_val = np.abs(Img_AfterAzimuthPulseCompression[view_azimuth, peak_val_arg])
+second_peak_val = np.abs(Img_AfterAzimuthPulseCompression[view_azimuth, second_peak_val_arg])
+
+print('peakVal_Arg: {}, second_peakVal_Arg: {}'.format(int(9500 + peak_val_arg * 1000 / 1024), int(9500 + second_peak_val_arg * 1000 / 1024)))
+print('peak_val: {}, second_peak_val: {}'.format(peak_val, second_peak_val))
+
+# Get Peak Side Lobe Ratio (PSLR):
+PSLR = 10 * np.log10(second_peak_val / peak_val)
+whether_satisfy = PSLR < -13
+print('PSLR(dB): {}'.format(PSLR), '< -13 dB' if whether_satisfy else '> -13 dB')
 
 # show all:
 plt.show()
