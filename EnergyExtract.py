@@ -1,3 +1,4 @@
+import sys
 import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
@@ -58,8 +59,7 @@ print('Extracted Energy/dB:', Energy_dB)
 print()
 
 # RCS:
-# RCS = 122.39
-RCS = 25.136
+RCS = eval(sys.argv[1]) if len(sys.argv) > 1 else 0
 RCS_dB = 10 * np.log10(RCS)
 
 print('Setting RCS:', RCS)
@@ -90,19 +90,19 @@ ROI_BBox_show = cv.rectangle(ROI_BBox_show, (Nr - SideLength_B, Na - SideLength_
 ROI_BBox_show = cv.rectangle(ROI_BBox_show, (38, 0), (54, Na - 1), color=(255, 0, 0), thickness=1)  # Azimuth longer
 ROI_BBox_show = cv.rectangle(ROI_BBox_show, (0, 42), (Nr - 1, 52), color=(255, 0, 0), thickness=1)  # Range longer
 
-# Show image:
-plt.figure('Region of Interest')
-plt.imshow(ROI_BBox_show)
-plt.xlabel('Range')
-plt.ylabel('Azimuth')
-plt.title('"Region of Interest"')
-
 # Show Mask_A
 plt.figure('Mask A')
 plt.imshow(A_Mask, cmap='gray')
 plt.xlabel('Range')
 plt.ylabel('Azimuth')
 plt.title('"Mask A"')
+
+# Show image:
+plt.figure('Region of Interest')
+plt.imshow(ROI_BBox_show)
+plt.xlabel('Range')
+plt.ylabel('Azimuth')
+plt.title('"Region of Interest"')
 
 # Show all:
 plt.show()
